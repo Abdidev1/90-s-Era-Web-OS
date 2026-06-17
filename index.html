@@ -58,6 +58,8 @@
             </div>
             <span class="icon-label">Calculator</span>
         </div>
+    
+    </div>
 
     </div>
 
@@ -104,12 +106,59 @@
             <div class="right-link-item">Control Panel</div>
             <div class="right-link-item">Help and Support</div>
 
+    <div class="taskbar">
+        <button class="start-button" id="startButton" title="Start">
+            <div class="start-orb-logo">
+                <div class="quad red"></div>
+                <div class="quad green"></div>
+                <div class="quad blue"></div>
+                <div class="quad yellow"></div>
+                <div class="orb-gloss"></div>
+            </div>
+        </button>
             <div class="start-footer-controls">
                 <button class="shutdown-lock-btn" title="Lock System"></button>
                 <button class="shutdown-power-btn" onclick="location.reload();" title="Shut Down / Restart"></button>
             </div>
         </div>
     </div>
+
+        <div class="running-apps" id="taskbarApps"></div>
+
+        <div class="system-tray">
+            <div class="tray-icons">
+                <div class="tray-net"></div>
+                <div class="tray-vol"></div>
+            </div>
+            <span class="time-display" id="clock">12:00 PM</span>
+        </div>
+    </div>
+
+    <div class="start-menu" id="startMenu">
+        <div class="start-left">
+            <div class="menu-item" data-app="computer">Computer</div>
+            <div class="menu-item" data-app="explorer">Documents</div>
+            <div class="menu-item" data-app="notepad">Notepad</div>
+            <div class="menu-item" data-app="calc">Calculator</div>
+            <div class="all-programs-link">All Programs</div>
+        </div>
+        <div class="start-right">
+            <div class="user-avatar-image"></div>
+        </div>
+        <div class="right-link-item" data-folder="root">Personal Folder</div>
+        <div class="right-link-item" data-folder="documents">Documents</div>
+        <div class="right-link-item" data-folder="pictures">Pictures</div>
+        <div class="right-link-item" data-folder="music">Music</div>
+        <hr class="vista-divider">
+        <div class="right-link-item">Control Panel</div>
+        <div class="right-link-item">Help and Support</div>
+
+        <div class="start-footer-controls">
+            <button class="shutdown-lock-btn" title="Lock System"></button>
+            <button class="shutdown-power-btn" onclick="location.reload();" title="Shut Down / Restart"></button>
+        </div>
+    </div>
+</div>
 
     <script src="script.js"></script>
 </body>
