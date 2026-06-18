@@ -79,7 +79,7 @@ body {
     backdrop-filter: blur(12px);
 }
  
-.window.maximize {
+.window.maximized {
     top: 0 !important;
     left: 0 !important;
     width: 100vw !important;
