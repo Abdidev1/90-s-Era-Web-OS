@@ -177,7 +177,7 @@
 
         tab.addEventListener('click', () => {
             if (winEl.style.display === 'none') {
-                winE.style.display = 'flex';
+                winEl.style.display = 'flex';
                 focusWindow(winEl, tab);
             } else if (!winEl.classList.contains('inactive')) {
                 winEl.style.display = 'none';
@@ -202,7 +202,7 @@
             }
         });
         
-        winEl.querySelector('close-btn').addEventListener('click', function (e) {
+        winEl.querySelector('.close-btn').addEventListener('click', function (e) {
             e.stopPropagation();
             winEl.remove();
             tab.remove();
@@ -218,12 +218,169 @@
             dragging = true;
             startX = e.clientX;
             startY = e.clientY;
-            originLeft = parseInt(winEl.style.originLeft, 10) || 0;
+            originLeft = parseInt(winEl.style.left, 10) || 0;
             originTop = parseInt(winEl.style.top, 10) || 0;
             focusWindow(winEl, tab);
-            document.addEventListener('mousemove', ondrag);
-            document.addEventListener('mouseup', ondragend);
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', onDragEnd);
+        });
+
+        function onDrag(e) {
+            if (!dragging) return;
+            winEl.style.left =  (originLeft + (e.clientX - startX)) + 'px';
+            winEl.style.top =   (originTop + (e.clientY - startY)) + 'px';
+        }
+
+        function onDragEnd() {
+            dragging = false
+            document.removeEventListener('mousemove', onDrag);
+            document.removeEventListener('mouseup', onDragEnd);
+        }
+    }
+
+    function buildExplorer(winEl, startFolder) {
+        const sidebar = winEl.querySelector('.explorer-sidebar');
+        const folders = ['root','documents','pictures','music'];
+
+        folders.forEach(function (key) {
+            const label = key === 'root'
+                ? 'Personal Folder'
+                :key.charAt(0).toUpperCase() + key.slice(1);
+            
+                const link = document.createElement('div');
+                link.className = 'sidebar-link';
+                link.textContent = label;
+                link.setAttribute('data-target', key);
+
+                link.addEventListener('click', function () {
+                    sidebar.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    showFolder(winEl, key);
+                });
+
+                sidebar.appendChild(link);
+        });
+
+        showFolder(winEl, startFolder);     
+    }
+    
+    function showFolder(winEl, folderKey) {
+        const main = winEl.querySelector('.explorer-main');
+        const sidebar = winEl.querySelector('.explorer-sidebar');
+        main.innerHTML = '';
+
+        const activeLink = sidebar.querySelector('[data-target="' + folderKey + '"]');
+        if (activeLink) {
+            sidebar.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            activeLink.classList.add('active');
+        }
+
+        const items = fileSystem[folderKey] || [];
+
+        items.forEach(function (item) {
+            const entry = document.createElement('div');
+            entry.className = 'file-item';
+
+            let color = '#3a82e6';
+            if (item.type === 'folder') color = '#f5c043';
+            if (item.type === 'image') color = '#8fa93c';
+
+            entry.innerHTML = `
+                <div class="file-icon">
+                    <svg viewBox="0 0 32 32" width="100%" height="100%">
+                        <rect x="4" y="6" width="24" height="20" rx="2" fill="${color}"/>
+                    </svg>
+                </div>
+                <div class="file-name">${item.name}</div>
+            `;
+
+            entry.addEventListener('dblclick', function () {
+                if (item.type === 'folder') {
+                    showFolder(winEl, item.target);
+                } else if (item.type === 'file') {
+                    launchApp('notepad');
+
+                    setTimeout(function () {
+                        var np = openWindows['notepad'];
+                        if (np) {
+                            np.winEl.querySelector('.notepad-textarea').value = item.content;
+                        }
+                    }, 80);
+                }
+            });
+
+            main.appendChild(entry);
         });
     }
 
-}) ();
+    function bindCalc(winEl) {
+        const display = winEl.querySelector('#calc-screen');
+        let expr = '';
+
+        winEl.querySelectorAll('.calc-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const val = btn.textContent;
+
+                if (val === 'C') {
+                    expr = '';
+                    display.value = '0';
+                } else if (val === '=') {
+                    try {
+                        if (expr) {
+                            const result = new Function('return ' + expr)();
+                            display.value = result;
+                            expr = String(result);
+                        }
+                    } catch (err) {
+                        display.value = 'Error';
+                        expr = '';
+                    }
+                } else {
+
+                    if (display.value === '0' && !isNaN(val)) {
+                        expr = val;
+                    } else {
+                        expr += val;
+                    }
+                    display.value = expr;
+                }
+            });
+        });
+        }
+
+        document.addEventListener('DOMContentLoaded', function (){
+            initClock();
+
+            startButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                startMenu.classList.toggle('open');
+            });
+
+            document.addEventListener('click', function () {
+                startMenu.classList.remove('open');
+            });
+
+            startMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            document.querySelectorAll('.shortcut').forEach(function (el) {
+                el.addEventListener('click', function () {
+                    launchApp(el.getAttribute('data-app'));
+                });
+            });
+
+            document.querySelectorAll('.menu-item[data-app]').forEach(function (el){
+                el.addEventListener('click', function () {
+                    launchApp(el.getAttribute('data-app'));
+                });
+            });
+
+            document.querySelectorAll('.right-link-item[data-folder]').forEach(function (el) {
+                el.addEventListener('click', function () {
+                    launchApp('explorer', el.getAttribute('data-folder'));
+                });
+            });
+        });
+
+})();
