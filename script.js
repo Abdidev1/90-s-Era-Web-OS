@@ -41,8 +41,8 @@
         },
         explorer: {
             title: "Documents",
-            width: "520",
-            height: "360",
+            width: 520,
+            height: 360,
             type: "html",
             data: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
                        <input type="text" id="calc-screen" readonly
@@ -100,7 +100,7 @@
             if (entry.winEl.style.display === 'none') {
                 entry.winEl.style.display = 'flex';
             }
-            focusWindow(entry,winEl, entry.tabEl);
+            focusWindow(entry.winEl, entry.tabEl);
             if (appKey === 'explorer') {
                 showFolder(entry.winEl, folder);
             }
@@ -110,5 +110,120 @@
         const cfg = apps[appKey];
         if (!cfg) return;
 
+        const windID = 'win-' + Math.random().toString(36).substr(2, 9);
+        const winEl = document.createElement('div');
+        winEl.className = 'window';
+        winEl.id = windID;
+        winEl.style.width = cfg.width + 'px';
+        winEl.style.height = cfg.height + 'px';
+
+        winEl.innerHTML = `
+        <div class= "title-bar">
+            <span class="title-text">${cfg.title}</span>
+            <div class="title-controls">
+                <button class="min-btn">_</button>
+                <button class="max-btn">[]</button>
+                <button class="close-btn">X</button>
+            </div>
+        </div>
+        <div class="window-body"></div>
+        `;
+
+        const body = winEl.querySelector('.window-body');
+
+        if (cfg.type === 'html') {
+            body.innerHTML = cfg.data;
+        } else if (cfg.type === 'explorer') {
+            body.innerHTML = `<div class="explorer-container">
+                                   <div class="explorer-sidebar"></div>
+                                   <div class="explorer-main"></div>
+                               </div>`;
+            buildExplorer(winEl, folder);
+        }
+
+        desktop.appendChild(winEl);
+
+        const tab = addTaskbarTab(windID, cfg.title);
+        openWindows[appKey] = { winEl, tabEl: tab};
+
+        wireWindowControls(winEl, tab, appKey);
+        focusWindow(winEl, tab);
+
+        if (appKey === 'calc') bindCalc(winEl);
     }
-})
+
+    function focusWindow(winEl, tabEl) {
+        document.querySelectorAll('.window').forEach(w => w.classList.add("inactive"));
+        document.querySelectorAll('.task-tab').forEach(t => t.classList.remove('active'));
+        winEl.classList.remove('inactive');
+        topZ += 2;
+        winEl.style.zIndex = topZ;
+        if (tabEl) tabEl.classList.add('active');
+    }
+
+    function addTaskbarTab(windID, title) {
+        const tab = document.createElement('div');
+        tab.className = 'task-tab';
+        tab.id = 'tab-' + windID;
+        tab.textContent = title;
+        taskbarApps.appendChild(tab);
+        return tab;
+    }
+
+    function wireWindowControls(winEl, tab, appKey) {
+        const titleBar = winEl.querySelector('.title-bar');
+
+        winEl.addEventListener('mousedown', () => focusWindow(winEl, tab));
+
+        tab.addEventListener('click', () => {
+            if (winEl.style.display === 'none') {
+                winE.style.display = 'flex';
+                focusWindow(winEl, tab);
+            } else if (!winEl.classList.contains('inactive')) {
+                winEl.style.display = 'none';
+            } else {
+                focusWindow(winEl, tab);
+            }
+        });
+
+        winEl.querySelector('.min-btn').addEventListener('click', function (e){
+            e.stopPropagation();
+            winEl.style.display = 'none';
+        });
+
+        winEl.querySelector('.max-btn').addEventListener('click', function (e){
+            e.stopPropagation();
+            if (maximized[winEl.id]) {
+                winEl.classList.remove('maximized');
+                maximized[winEl.id] = false
+            } else {
+                winEl.classList.add('maximized');
+                maximized[winEl.id] = true
+            }
+        });
+        
+        winEl.querySelector('close-btn').addEventListener('click', function (e) {
+            e.stopPropagation();
+            winEl.remove();
+            tab.remove();
+            delete openWindows[appKey];
+            delete maximized[winEl.id];
+        });
+
+        let dragging = false;
+        let startX, startY, originLeft, originTop;
+
+        titleBar.addEventListener('mousedown', function (e) {
+            if (e.target.tagName === 'BUTTON' || maximized[winEl.id]) return;
+            dragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            originLeft = parseInt(winEl.style.originLeft, 10) || 0;
+            originTop = parseInt(winEl.style.top, 10) || 0;
+            focusWindow(winEl, tab);
+            document.addEventListener('mousemove', ondrag);
+            document.addEventListener('mouseup', ondragend);
+        });
+    }
+
+}) ();
