@@ -44,4 +44,4 @@
  ES6: the brain of project, no frameworks were used, it handles all interactive stats like making the clock tick,calculating maths strings, making windows draggable, etc.
 
 ## Motivation:
- i wanted to build fun retro desktop project to practice my frontend coding skills from scratch. instead of using massive external libraries or Ui Framworks (like rust) that do a lot of heavy lifting, i wanted to challange myself to write everything using raw web languages. it was a great way to learn how web pages handle active mouse movements, customwindow layer stacking, and dynamic interface changes when clicked.
+ i wanted to build fun retro desktop project to practice my frontend coding skills from scratch. instead of using massive external libraries or Ui Framworks (like react) that do a lot of heavy lifting, i wanted to challange myself to write everything using raw web languages. it was a great way to learn how web pages handle active mouse movements, customwindow layer stacking, and dynamic interface changes when clicked.
