@@ -40,10 +40,16 @@
             data: '<textarea class="notepad-textarea" placeholder="Start typing..."></textarea>'
         },
         explorer: {
-            title: "Documents",
+            title : 'Documents',
             width: 520,
             height: 360,
-            type: "html",
+            type: "explorer"
+        },
+        calc: {
+            title: "Calculator",
+            width: 240,
+            height: 310,
+            type: 'html',
             data: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
                        <input type="text" id="calc-screen" readonly
                            style="grid-column:span 4;text-align:right;padding:8px;margin-bottom:10px;
@@ -65,6 +71,7 @@
                        <button class="calc-btn" style="padding:10px;grid-column:span 2;">=</button>
                        <button class="calc-btn" style="padding:10px;grid-column:span 2;">0</button>
                    </div>`
+
         }
     };
 
@@ -118,7 +125,7 @@
         winEl.style.height = cfg.height + 'px';
 
         winEl.innerHTML = `
-        <div class= "title-bar">
+        <div class="title-bar">
             <span class="title-text">${cfg.title}</span>
             <div class="title-controls">
                 <button class="min-btn">_</button>
@@ -317,6 +324,8 @@
         const display = winEl.querySelector('#calc-screen');
         let expr = '';
 
+        let isResultDisplayed = false;
+
         winEl.querySelectorAll('.calc-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 const val = btn.textContent;
@@ -324,29 +333,44 @@
                 if (val === 'C') {
                     expr = '';
                     display.value = '0';
+
+                    isResultDisplayed = false;
                 } else if (val === '=') {
                     try {
                         if (expr) {
                             const result = new Function('return ' + expr)();
                             display.value = result;
                             expr = String(result);
+
+                            isResultDisplayed = true;
                         }
                     } catch (err) {
                         display.value = 'Error';
                         expr = '';
+
+                        isResultDisplayed = false;
                     }
                 } else {
 
-                    if (display.value === '0' && !isNaN(val)) {
-                        expr = val;
+                    if (isResultDisplayed) {
+                        if (!isNaN(val)) {
+                            expr = val;
+                        } else {
+                            expr+= val;
+                        }
+                        isResultDisplayed = false;
                     } else {
-                        expr += val;
+                        if (display.value === '0' && !isNaN(val)) {
+                            expr = val;
+                        } else {
+                            expr += val;
+                        }
                     }
                     display.value = expr;
                 }
             });
         });
-        }
+    }
 
         document.addEventListener('DOMContentLoaded', function (){
             initClock();
