@@ -18,14 +18,14 @@
  the folder app reads from a simple list of files stored in the code that mirrors a standard folder tree. when you double click folder, the screen displays the files inside the new specific path.
 
 ## What works and what doesnt:
-* Works:
+## Works:
  * core apps:
      all apps on the desktop (Computer,documents,notepad, and calculator) can be launched, dragged, minmized, maximized and closed.
 
  * live Clock:
      the time displays in the taskbar automatically updates in realtime.
 
-* file explorer navigation:
+ * file explorer navigation:
      the folder system lets you double click through specific paths (like pictures or music but its just for visuals pictures and music wont show up) and can load note pad files when you double click them
 
 ## Doesnt Work:
