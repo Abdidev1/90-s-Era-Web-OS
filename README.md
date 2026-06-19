@@ -22,9 +22,9 @@ Everything runs client-side in the browser.
 * **Calculator UI:** Although the calculator works fine, the UI is kind of messed up right now.
 
 ### Tech Stack
-* **HTML5:** Used to build the main skeleton of the desktop, buttons, and windows. The icons are made through SVGs instead of image files.
+* **HTML5:** Used for core structural layout, The icons are made through SVGs instead of image files.
 * **CSS3:** Handles the presentation. Uses gradients, box shadows, and a blur effect (`backdrop-filter`) to create that iconic translucent "glass" look without needing heavy background images.
-* **JavaScript (ES6):** The brain of the project. No frameworks were used. It handles all interactive states like making the clock tick, calculating math strings, making windows draggable, etc.
+* **JavaScript (ES6):** The core of the project. built entirely without framworks or libraries to handle window physics & math execution.
 
-### Motivation
-I wanted to build a fun retro desktop project to practice my frontend coding skills from scratch. Instead of using massive external libraries or UI frameworks that do a lot of heavy lifting, I wanted to challenge myself to write everything using raw web languages. It was a great way to learn how web pages handle active mouse movements, custom window layer stacking, and dynamic interface changes when clicked.
+### Why i built this:
+i wanted to challange myself to build a functional retro desktop completely from scratch to level up my frontend fundamentals. it would have been easy to grab a massive ui framework or library, but writing everything in raw web languages forced me to actually learn the DOM manipulation, complex mouse event tracking, dynamic layer stacking.
