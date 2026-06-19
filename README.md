@@ -30,3 +30,12 @@ Start-Apps: some start apps like desktop will work but help & support, control p
 calculator Ui: altough the calculator works fine but the Ui Is kind of messed up right now
 
 Tech Stack:
+
+HTML5: used to build the main skeleton of desktop,button and windows. the icons are made thorugh SVGs instead of image files.
+
+CSS3: handles the presentation. uses gradiesnts,box shadows, and blur effect (backdrop-filter) to create that iconic translucent 'glass' look without needing heavy background images
+
+Javascript ES6: the brain of project, no frameworks were used, it handles all interactive stats like making the clock tick,calculating maths strings, making windows draggable, etc.
+
+Motivation: i wanted to build fun retro desktop project to practice my frontend coding skills from scratch. instead of using massive external libraries or Ui Framworks (like rust) that do a lot of heavy lifting, i wanted to challange myself to write everything using raw web languages. it was a great way to learn how web pages handle active mouse movements, custom
+window layer stacking, and dynamic interface changes when clicked.
