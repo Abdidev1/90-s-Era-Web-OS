@@ -45,3 +45,16 @@
 
 ## Motivation:
  i wanted to build fun retro desktop project to practice my frontend coding skills from scratch. instead of using massive external libraries or Ui Framworks (like react) that do a lot of heavy lifting, i wanted to challange myself to write everything using raw web languages. it was a great way to learn how web pages handle active mouse movements, customwindow layer stacking, and dynamic interface changes when clicked.
+
+## How to Contribute:
+ ### Current Areas to Improve;
+ * Fixing Calculator UI
+ * Implement Control Panel & Help and Support
+ * Expand the folder system
+
+ ### Steps to Contribute:
+  1. Fork The Project (using the fork button at top right of page)
+  2. Create Your feature branch.
+  3. Commit Changes 
+  4. Push to the branch
+  5. Open a pull request against the main branch.
