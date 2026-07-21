@@ -29,7 +29,7 @@
      the folder system lets you double click through specific paths (like pictures or music but its just for visuals pictures and music wont show up) and can load note pad files when you double click them
 
 ## Doesnt Work:
-* Start-Apps:
+* Start-Apps: 
  some start apps like desktop will work but help & support, control panel, etc wont work and give no response
 
 * calculator Ui:
